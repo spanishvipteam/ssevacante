@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpanishVIP — Student Success</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --deep: #231b49;
+  --fire: #f2500b;
+  --teal: #6dc2ba;
+  --white: #ffffff;
+  --light-bg: #f8f7fc;
+  --glass: rgba(255,255,255,0.08);
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--deep);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--deep); }
+::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 3px; }
+
+/* ── NAVIGATION DOTS ── */
+.nav-dots {
+  position: fixed; right: 28px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 14px; z-index: 100;
+}
+.nav-dots a {
+  width: 11px; height: 11px; border-radius: 50%;
+  border: 2px solid var(--teal); background: transparent;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+.nav-dots a.active, .nav-dots a:hover {
+  background: var(--fire); border-color: var(--fire);
+  transform: scale(1.3);
+}
+.nav-dots a .tooltip {
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+  background: var(--deep); color: var(--teal); padding: 4px 12px;
+  border-radius: 6px; font-size: 0.7rem; font-weight: 600;
+  white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s; letter-spacing: 0.05em; text-transform: uppercase;
+}
+.nav-dots a:hover .tooltip { opacity: 1; }
+
+/* ── SECTIONS ── */
+section {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 80px 40px; position: relative; overflow: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(160deg, #1a1338 0%, var(--deep) 40%, #1e1640 100%);
+  text-align: center; flex-direction: column;
+}
+.hero::before {
+  content: ''; position: absolute; top: -200px; right: -200px;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(109,194,186,0.12) 0%, transparent 70%);
+  animation: float 8s ease-in-out infinite;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -150px; left: -150px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(242,80,11,0.08) 0%, transparent 70%);
+  animation: float 10s ease-in-out infinite reverse;
+}
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -40px) scale(1.05); }
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--glass); border: 1px solid rgba(109,194,186,0.25);
+  padding: 10px 24px; border-radius: 50px;
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--teal);
+  animation: slideDown 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  backdrop-filter: blur(10px);
+}
+.hero-badge .dot {
+  width: 8px; height: 8px; background: var(--fire);
+  border-radius: 50%; animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.7); }
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif; font-weight: 800;
+  font-size: clamp(2.8rem, 6vw, 5.5rem); line-height: 1.05;
+  margin: 32px 0 20px; position: relative; z-index: 1;
+  animation: slideUp 1s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.hero h1 span { color: var(--fire); }
+.hero h1 em {
+  font-style: normal; color: var(--teal);
+  text-decoration: underline; text-decoration-color: rgba(109,194,186,0.3);
+  text-underline-offset: 6px;
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.25rem); color: rgba(255,255,255,0.6);
+  max-width: 540px; line-height: 1.7; font-weight: 300;
+  animation: slideUp 1s 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.scroll-cue {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  animation: slideUp 1s 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.scroll-cue span {
+  font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35); font-weight: 600;
+}
+.scroll-cue .arrow {
+  width: 20px; height: 20px; border-right: 2px solid var(--teal);
+  border-bottom: 2px solid var(--teal); transform: rotate(45deg);
+  animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: rotate(45deg) translateY(0); }
+  50% { transform: rotate(45deg) translateY(8px); }
+}
+
+/* ── ABOUT ── */
+.about { background: var(--white); color: var(--deep); }
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; max-width: 1100px; align-items: center;
+}
+.about-label {
+  font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--fire); font-weight: 700; margin-bottom: 16px;
+}
+.about h2 {
+  font-family: 'Playfair Display', serif; font-weight: 700;
+  font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 24px;
+}
+.about h2 span { color: var(--teal); }
+.about p {
+  font-size: 1.05rem; line-height: 1.8; color: rgba(35,27,73,0.7); font-weight: 300;
+}
+
+.role-cards {
+  display: flex; flex-direction: column; gap: 16px;
+}
+.role-card {
+  background: var(--light-bg); border-radius: 16px; padding: 24px 28px;
+  border-left: 4px solid transparent; transition: all 0.4s ease;
+  cursor: default;
+}
+.role-card:nth-child(1) { border-left-color: var(--fire); }
+.role-card:nth-child(2) { border-left-color: var(--teal); }
+.role-card:nth-child(3) { border-left-color: var(--deep); }
+.role-card:hover {
+  transform: translateX(8px);
+  box-shadow: 0 8px 30px rgba(35,27,73,0.08);
+}
+.role-card h4 {
+  font-weight: 700; font-size: 1rem; margin-bottom: 6px; color: var(--deep);
+}
+.role-card p {
+  font-size: 0.88rem; color: rgba(35,27,73,0.55); margin: 0; font-weight: 400;
+}
+
+/* ── FUNCTIONS ── */
+.functions { background: linear-gradient(170deg, #1a1338, var(--deep)); }
+.func-wrapper { max-width: 1100px; width: 100%; }
+.section-header {
+  text-align: center; margin-bottom: 60px;
+}
+.section-header .label {
+  font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--teal); font-weight: 700; margin-bottom: 12px;
+}
+.section-header h2 {
+  font-family: 'Playfair Display', serif; font-weight: 700;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+}
+.section-header h2 span { color: var(--fire); }
+
+.func-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.func-item {
+  background: var(--glass); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px; padding: 32px 28px;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative; overflow: hidden;
+}
+.func-item::after {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--fire), var(--teal));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.func-item:hover::after { transform: scaleX(1); }
+.func-item:hover {
+  transform: translateY(-6px);
+  background: rgba(255,255,255,0.06);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.func-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; margin-bottom: 18px;
+  background: linear-gradient(135deg, rgba(242,80,11,0.15), rgba(109,194,186,0.15));
+}
+.func-item h4 {
+  font-weight: 700; font-size: 1rem; margin-bottom: 8px;
+}
+.func-item p {
+  font-size: 0.85rem; line-height: 1.6; color: rgba(255,255,255,0.5);
+  font-weight: 300;
+}
+
+/* ── PROFILE ── */
+.profile { background: var(--white); color: var(--deep); }
+.profile-wrapper { max-width: 900px; width: 100%; text-align: center; }
+.profile .section-header h2 { color: var(--deep); }
+.profile .label { color: var(--fire) !important; }
+.traits-grid {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
+  margin-top: 40px;
+}
+.trait {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--light-bg); border-radius: 50px;
+  padding: 14px 28px; font-weight: 600; font-size: 0.95rem;
+  transition: all 0.4s ease; cursor: default;
+}
+.trait:hover {
+  background: var(--deep); color: var(--white);
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(35,27,73,0.15);
+}
+.trait .check {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--fire), var(--teal));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--white); font-size: 0.75rem; font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ── DETAILS ── */
+.details { background: linear-gradient(170deg, var(--deep), #1a1338); }
+.details-wrapper { max-width: 1100px; width: 100%; }
+.details-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 50px;
+}
+.detail-card {
+  background: var(--glass); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px; padding: 36px 32px;
+  transition: all 0.5s ease; position: relative; overflow: hidden;
+}
+.detail-card:hover {
+  border-color: rgba(109,194,186,0.2);
+  transform: translateY(-4px);
+}
+.detail-card .card-icon {
+  font-size: 1.8rem; margin-bottom: 16px;
+}
+.detail-card h3 {
+  font-family: 'Playfair Display', serif; font-weight: 700;
+  font-size: 1.35rem; margin-bottom: 16px;
+}
+.detail-card .highlight {
+  display: inline-block; background: linear-gradient(135deg, var(--fire), #ff7a3d);
+  color: var(--white); padding: 6px 18px; border-radius: 8px;
+  font-size: 1.1rem; font-weight: 700; margin-bottom: 16px;
+}
+.detail-card .teal-highlight {
+  background: linear-gradient(135deg, var(--teal), #8fd8d0);
+  color: var(--deep);
+}
+.detail-card p, .detail-card li {
+  font-size: 0.9rem; line-height: 1.7; color: rgba(255,255,255,0.55);
+  font-weight: 300;
+}
+.detail-card ul {
+  list-style: none; display: flex; flex-direction: column; gap: 8px;
+}
+.detail-card li::before {
+  content: '→'; color: var(--teal); margin-right: 10px; font-weight: 700;
+}
+.detail-note {
+  margin-top: 12px; padding: 12px 16px; border-radius: 10px;
+  background: rgba(109,194,186,0.08); border-left: 3px solid var(--teal);
+  font-size: 0.82rem !important; color: rgba(255,255,255,0.45) !important;
+}
+
+/* ── ONBOARDING ── */
+.onboarding { background: var(--white); color: var(--deep); }
+.onboard-wrapper { max-width: 900px; width: 100%; }
+.onboard-wrapper .label { color: var(--fire) !important; }
+.onboard-wrapper .section-header h2 { color: var(--deep); }
+.timeline {
+  margin-top: 50px; position: relative; padding-left: 40px;
+}
+.timeline::before {
+  content: ''; position: absolute; left: 14px; top: 0;
+  width: 3px; height: 100%; border-radius: 2px;
+  background: linear-gradient(to bottom, var(--fire), var(--teal), var(--deep));
+}
+.timeline-item {
+  position: relative; margin-bottom: 40px; padding: 28px 32px;
+  background: var(--light-bg); border-radius: 16px;
+  transition: all 0.4s ease;
+}
+.timeline-item:hover {
+  transform: translateX(6px);
+  box-shadow: 0 8px 30px rgba(35,27,73,0.06);
+}
+.timeline-item::before {
+  content: ''; position: absolute; left: -34px; top: 32px;
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 3px solid var(--fire); background: var(--white);
+}
+.timeline-item:nth-child(2)::before { border-color: var(--teal); }
+.timeline-item:nth-child(3)::before { border-color: var(--deep); }
+.timeline-item h4 {
+  font-weight: 700; font-size: 1.05rem; color: var(--deep); margin-bottom: 8px;
+}
+.timeline-item p {
+  font-size: 0.9rem; color: rgba(35,27,73,0.6); line-height: 1.7; font-weight: 300;
+}
+
+/* ── CTA ── */
+.cta {
+  background: linear-gradient(160deg, var(--deep), #2a2058);
+  text-align: center; flex-direction: column;
+  position: relative;
+}
+.cta::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(242,80,11,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(109,194,186,0.1) 0%, transparent 50%);
+}
+.cta h2 {
+  font-family: 'Playfair Display', serif; font-weight: 800;
+  font-size: clamp(2rem, 4vw, 3.2rem); position: relative; z-index: 1;
+  line-height: 1.2; margin-bottom: 16px;
+}
+.cta h2 span { color: var(--fire); }
+.cta p {
+  font-size: 1.05rem; color: rgba(255,255,255,0.5); max-width: 480px;
+  line-height: 1.7; font-weight: 300; position: relative; z-index: 1;
+  margin-bottom: 36px;
+}
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: var(--fire); color: var(--white);
+  padding: 18px 42px; border-radius: 60px;
+  font-size: 1rem; font-weight: 700; text-decoration: none;
+  letter-spacing: 0.05em; position: relative; z-index: 1;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 4px 20px rgba(242,80,11,0.3);
+}
+.cta-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 40px rgba(242,80,11,0.45);
+}
+.cta-btn .arrow-r { transition: transform 0.3s; }
+.cta-btn:hover .arrow-r { transform: translateX(4px); }
+
+/* ── SCROLL ANIMATIONS ── */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  section { padding: 60px 24px; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .func-grid { grid-template-columns: 1fr; }
+  .details-grid { grid-template-columns: 1fr; }
+  .nav-dots { right: 14px; }
+  .nav-dots a .tooltip { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav class="nav-dots">
+  <a href="#hero" class="active"><span class="tooltip">Inicio</span></a>
+  <a href="#about"><span class="tooltip">Sobre nosotros</span></a>
+  <a href="#functions"><span class="tooltip">Funciones</span></a>
+  <a href="#profile"><span class="tooltip">Perfil</span></a>
+  <a href="#details"><span class="tooltip">Detalles</span></a>
+  <a href="#onboarding"><span class="tooltip">Onboarding</span></a>
+  <a href="#cta"><span class="tooltip">Aplica</span></a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-badge"><span class="dot"></span> Estamos contratando</div>
+  <h1>Student <span>Success</span><br><em>Specialist</em></h1>
+  <p class="hero-sub">Únete a SpanishVIP y ayuda a estudiantes de todo el mundo a alcanzar sus metas con el español.</p>
+  <div class="scroll-cue">
+    <span>Descubre más</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div>
+      <div class="about-label reveal">🌎 Sobre SpanishVIP</div>
+      <h2 class="reveal reveal-delay-1">Enseñanza de español <span>online</span> para el mundo</h2>
+      <p class="reveal reveal-delay-2">SpanishVIP es una empresa internacional dedicada a la enseñanza de español online para estudiantes de diferentes países. Buscamos una persona para el área de Student Success, enfocada en brindar una excelente experiencia y apoyar procesos comerciales y de seguimiento.</p>
+    </div>
+    <div class="role-cards">
+      <div class="role-card reveal reveal-delay-1">
+        <h4>💬 Customer Support</h4>
+        <p>Atención directa y resolución de inquietudes de los estudiantes.</p>
+      </div>
+      <div class="role-card reveal reveal-delay-2">
+        <h4>🎯 Student Success</h4>
+        <p>Acompañamiento integral para que cada estudiante alcance sus metas.</p>
+      </div>
+      <div class="role-card reveal reveal-delay-3">
+        <h4>📈 Ventas Consultivas</h4>
+        <p>Apoyo en renovaciones, retención y crecimiento de la comunidad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNCTIONS -->
+<section class="functions" id="functions">
+  <div class="func-wrapper">
+    <div class="section-header">
+      <div class="label reveal">🧩 Funciones</div>
+      <h2 class="reveal reveal-delay-1">¿Qué harás en este <span>cargo</span>?</h2>
+    </div>
+    <div class="func-grid">
+      <div class="func-item reveal">
+        <div class="func-icon">🤝</div>
+        <h4>Atención al estudiante</h4>
+        <p>Acompañamiento personalizado y constante a cada estudiante de la comunidad.</p>
+      </div>
+      <div class="func-item reveal reveal-delay-1">
+        <div class="func-icon">🔧</div>
+        <h4>Resolución de dudas</h4>
+        <p>Atender y resolver inquietudes e inconvenientes de forma ágil y empática.</p>
+      </div>
+      <div class="func-item reveal reveal-delay-2">
+        <div class="func-icon">📋</div>
+        <h4>Seguimiento de procesos</h4>
+        <p>Gestión y seguimiento de solicitudes internas y externas.</p>
+      </div>
+      <div class="func-item reveal reveal-delay-3">
+        <div class="func-icon">💼</div>
+        <h4>Ventas y retención</h4>
+        <p>Apoyo en renovaciones y estrategias de retención de estudiantes.</p>
+      </div>
+      <div class="func-item reveal reveal-delay-4">
+        <div class="func-icon">💻</div>
+        <h4>Herramientas digitales</h4>
+        <p>Manejo de plataformas y herramientas para la gestión diaria.</p>
+      </div>
+      <div class="func-item reveal reveal-delay-5">
+        <div class="func-icon">📡</div>
+        <h4>Comunicación constante</h4>
+        <p>Interacción continua con estudiantes y el equipo interno de SpanishVIP.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section class="profile" id="profile">
+  <div class="profile-wrapper">
+    <div class="section-header">
+      <div class="label reveal">✨ Perfil ideal</div>
+      <h2 class="reveal reveal-delay-1">¿Eres tú quien buscamos?</h2>
+    </div>
+    <div class="traits-grid">
+      <div class="trait reveal"><span class="check">✓</span> Organizada</div>
+      <div class="trait reveal reveal-delay-1"><span class="check">✓</span> Empática</div>
+      <div class="trait reveal reveal-delay-2"><span class="check">✓</span> Resolutiva</div>
+      <div class="trait reveal reveal-delay-3"><span class="check">✓</span> Buena comunicación</div>
+      <div class="trait reveal reveal-delay-4"><span class="check">✓</span> Cómoda con clientes internacionales</div>
+    </div>
+  </div>
+</section>
+
+<!-- DETAILS -->
+<section class="details" id="details">
+  <div class="details-wrapper">
+    <div class="section-header">
+      <div class="label reveal">📌 Detalles</div>
+      <h2 class="reveal reveal-delay-1">Lo que necesitas <span>saber</span></h2>
+    </div>
+    <div class="details-grid">
+      <div class="detail-card reveal">
+        <div class="card-icon">⏰</div>
+        <h3>Horario y modalidad</h3>
+        <div class="highlight teal-highlight">100% Remoto</div>
+        <ul>
+          <li>Lunes a viernes</li>
+          <li>9:00 a.m. – 5:00 p.m. (Hora Colombia)</li>
+          <li>Horario estable tipo oficina</li>
+        </ul>
+      </div>
+      <div class="detail-card reveal reveal-delay-1">
+        <div class="card-icon">💰</div>
+        <h3>Compensación</h3>
+        <div class="highlight">$2.500.000 COP/mes</div>
+        <p>Posibilidad de aumento salarial después de ~3 meses según desempeño, adaptación, resultados y crecimiento.</p>
+      </div>
+      <div class="detail-card reveal reveal-delay-2">
+        <div class="card-icon">📄</div>
+        <h3>Tipo de vinculación</h3>
+        <p>Acuerdo verbal de prestación de servicios. SpanishVIP está constituida legalmente en Estados Unidos.</p>
+        <div class="detail-note">No incluye prestaciones sociales colombianas, salud ni pensión. Toda la información se explica en detalle durante el proceso.</div>
+      </div>
+      <div class="detail-card reveal reveal-delay-3">
+        <div class="card-icon">📈</div>
+        <h3>Crecimiento</h3>
+        <p>Oportunidad de crecer dentro de la empresa, asumir nuevas responsabilidades y aumentar tu compensación con el tiempo.</p>
+        <ul>
+          <li>Evaluación a los 3 meses</li>
+          <li>Crecimiento basado en resultados</li>
+          <li>Desarrollo profesional continuo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ONBOARDING -->
+<section class="onboarding" id="onboarding">
+  <div class="onboard-wrapper">
+    <div class="section-header">
+      <div class="label reveal">📚 Onboarding</div>
+      <h2 class="reveal reveal-delay-1">Tu camino de inicio</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <h4>Semana 1–2 · Entrenamiento inicial</h4>
+        <p>Aprenderás sobre la empresa, las herramientas, los procesos y la metodología de trabajo. Todo paso a paso.</p>
+      </div>
+      <div class="timeline-item reveal reveal-delay-1">
+        <h4>Acompañamiento constante</h4>
+        <p>Tendrás apoyo continuo del equipo para resolver dudas y sentirte segura en cada tarea.</p>
+      </div>
+      <div class="timeline-item reveal reveal-delay-2">
+        <h4>Adaptación progresiva</h4>
+        <p>Te integrarás gradualmente a las herramientas, procesos y dinámica del equipo a tu propio ritmo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <h2 class="reveal">¿Lista para ser parte<br>de <span>SpanishVIP</span>?</h2>
+  <p class="reveal reveal-delay-1">Gracias por tu interés en unirte a nuestro equipo. Estamos emocionados de conocerte.</p>
+  <a href="#" class="cta-btn reveal reveal-delay-2">
+    Thank you for your interest in joining our team! <span class="arrow-r">🎉</span>
+  </a>
+</section>
+
+<script>
+// Intersection Observer for reveal animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Active nav dot
+const sections = document.querySelectorAll('section');
+const dots = document.querySelectorAll('.nav-dots a');
+
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      dots.forEach(d => d.classList.remove('active'));
+      const id = entry.target.id;
+      const activeDot = document.querySelector(`.nav-dots a[href="#${id}"]`);
+      if (activeDot) activeDot.classList.add('active');
+    }
+  });
+}, { threshold: 0.4 });
+
+sections.forEach(s => navObserver.observe(s));
+</script>
+
+</body>
+</html>
